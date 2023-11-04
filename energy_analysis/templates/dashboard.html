@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Grid Table</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            justify-content: center;
+            align-items: center;
+            margin: 0;
+            padding: 0;
+        }
+
+        .table-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 50vh; /* 50% of the viewport height */
+        }
+
+        .grid-table {
+            display: grid;
+            margin-top: 20rem;
+            grid-template-columns: repeat(4, 1fr);
+            grid-template-rows: repeat(5, 1fr);
+            gap: 1px;
+            /* border: 2px solid #0095a0; */
+            background-color: #fff;
+            width: 80%; /* 50% of the viewport width */
+            height: 90%;
+            max-width: 100%; /* Ensure it doesn't exceed the viewport width */
+        }
+
+        .header {
+            background-color: #0095a0;
+            color: #fff;
+            padding: 10px;
+            text-align: center;
+        }
+
+        .cell {
+            background-color: #fff;
+            padding: 10px;
+            border: 1px solid #0095a0;
+            text-align: center;
+        }
+
+        .button-container {
+            margin: 2rem;
+            display: flex;
+            justify-content: space-between;
+            display: flex;
+            gap: 10px;
+        }
+
+        .button {
+            background-color: #0095a0;
+            color: #fff;
+            padding: 5px 10px;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+        .button:hover {
+            background-color: #007080;
+            color: #fff;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="button-container">
+        <a href="#" class="button">Profile</a>
+        <a href="#" class="button">Add New Data</a>
+        <a href="#" class="button">Logout</a>
+    </div>
+    <div class="table-container">
+        <div class="grid-table">
+            <div style="border: 1px solid #f0f0f0; background-color: #f0f0f0;" class="cell"></div>
+            <div class="header">Daily Average</div>
+            <div class="header">Weekly Average</div>
+            <div class="header">Monthly Total</div>
+            
+            <div class="header">Total Energy</div>
+            <div class="cell">Data 2</div>
+            <div class="cell">Data 3</div>
+            <div class="cell">Data 4</div>
+            
+            <div class="header">Air Conditioner</div>
+            <div class="cell">Data 6</div>
+            <div class="cell">Data 7</div>
+            <div class="cell">Data 8</div>
+            
+            <div class="header">Cooking Gas</div>
+            <div class="cell">Data 10</div>
+            <div class="cell">Data 11</div>
+            <div class="cell">Data 12</div>
+            
+            <div class="header">Total Price</div>
+            <div class="cell">Data 14</div>
+            <div class="cell">Data 15</div>
+            <div class="cell">Data 16</div>
+        </div>
+    </div>
+</body>
+</html>

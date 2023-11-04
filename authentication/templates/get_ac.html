@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>AC Watts Calculator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+            padding: 20px;
+            width: 400px;
+        }
+
+        .input-container {
+            display: flex;
+            padding-left: 2rem;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .input-group{
+            display: flex;
+            gap: 1rem;
+        }
+
+        input[type="number"] {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .add-button, .submit-button {
+            background-color: #0095a0;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-align: center;
+        }
+        
+        .add-button:hover, .submit-button:hover {
+            background-color: #014f55;
+        }
+
+        .add-button {
+            max-width: 5rem;
+        }
+
+        .label {
+            padding-top: 0.5rem;
+            font-weight: bold;
+        }
+
+        button[type="submit"] {
+            display: block;
+            margin: 0 auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 style="text-align: center;">Energy details</h1>
+        <form action="/auth/add_ac/" id="ac-form" method="POST">
+            <div class="input-container">
+                <div class="input-group">
+                    <label class="label" for="acWatts1">AC 1</label>
+                    <input type="number" name="acWatts1" id="acWatts1" placeholder="Enter Watts">
+                </div>
+                <button type="button" class="add-button" onclick="addInputField()">+</button>
+            </div>
+            <button type="submit" class="submit-button">Submit</button>
+        </form>
+    </div>
+
+    <script>
+        let acCount = 1;
+
+        function addInputField() {
+            acCount++;
+            const inputContainer = document.querySelector('.input-container');
+            const newInputGroup = document.createElement('div');
+            newInputGroup.classList.add('input-group');
+            const newLabel = document.createElement('label');
+            newLabel.setAttribute('for', `acWatts${acCount}`);
+            newLabel.classList.add('label');
+            newLabel.textContent = `AC ${acCount}`;
+            const newInput = document.createElement('input');
+            newInput.type = 'number';
+            newInput.name = `acWatts${acCount}`;
+            newInput.id = `acWatts${acCount}`;
+            newInput.placeholder = 'Enter Watts';
+            newInputGroup.appendChild(newLabel);
+            newInputGroup.appendChild(newInput);
+            inputContainer.insertBefore(newInputGroup, document.querySelector('.add-button'));
+        }
+    </script>
+</body>
+</html>
