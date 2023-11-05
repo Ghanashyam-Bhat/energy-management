@@ -27,7 +27,7 @@
             grid-template-rows: repeat(5, 1fr);
             gap: 1px;
             /* border: 2px solid #0095a0; */
-            background-color: #fff;
+            background-color: #f0f0f0;
             width: 80%; /* 50% of the viewport width */
             height: 90%;
             max-width: 100%; /* Ensure it doesn't exceed the viewport width */
@@ -83,24 +83,19 @@
             <div class="header">Monthly Total</div>
             
             <div class="header">Total Energy</div>
-            <div class="cell">Data 2</div>
-            <div class="cell">Data 3</div>
-            <div class="cell">Data 4</div>
+            <div class="cell">{{ matrix.dailyAvgEnergy }}</div>
+            <div class="cell">{{ matrix.weeklyAvgEnergy }}</div>
+            <div class="cell">{{ matrix.monthlyTotalEnergy }}</div>
             
             <div class="header">Air Conditioner</div>
-            <div class="cell">Data 6</div>
-            <div class="cell">Data 7</div>
-            <div class="cell">Data 8</div>
+            <div class="cell">{{ matrix.dailyAvgAc }}</div>
+            <div class="cell">{{ matrix.weeklyAvgAc }}</div>
+            <div class="cell">{{ matrix.monthlyTotalAc }}</div>
             
             <div class="header">Cooking Gas</div>
-            <div class="cell">Data 10</div>
-            <div class="cell">Data 11</div>
-            <div class="cell">Data 12</div>
-            
-            <div class="header">Total</div>
-            <div class="cell">Data 14</div>
-            <div class="cell">Data 15</div>
-            <div class="cell">Data 16</div>
+            <div class="cell">{{ matrix.dailyAvgGas }}</div>
+            <div class="cell">{{ matrix.weeklyAvgGas }}</div>
+            <div class="cell">{{ matrix.monthlyTotalGas }}</div>
         </div>
     </div>
     <script>

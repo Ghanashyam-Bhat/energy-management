@@ -1,16 +1,170 @@
+import datetime
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from authentication import models as authModels
 from .models import airConditionerUnits, electricityUnits, gas as GasUnits, dailyHistory
+import math
 
 
 # Create your views here.
 @login_required(login_url="/auth/login/")
 def dashboard(request):
     if request.method == "GET":
+        allData = list(
+            map(
+                lambda x: {
+                    "date": x.date,
+                    "energy": x.totalElectricity,
+                    "gas": x.totalGas,
+                    "ac": x.totalAc,
+                },
+                dailyHistory.objects.filter(user__id=request.user),
+            )
+        )
+
+        matrix = {
+            "dailyAvgEnergy": sum(list(map(lambda x: x["energy"], allData)))
+            / len(list(map(lambda x: x["energy"], allData))),
+            "dailyAvgAc": sum(list(map(lambda x: x["ac"], allData)))
+            / len(list(map(lambda x: x["energy"], allData))),
+            "dailyAvgGas": sum(list(map(lambda x: x["gas"], allData)))
+            / len(list(map(lambda x: x["energy"], allData))),
+            "weeklyAvgEnergy": sum(
+                list(
+                    map(
+                        lambda x: x["energy"],
+                        list(
+                            filter(
+                                lambda x: x["date"]
+                                > datetime.datetime.now().date()
+                                - datetime.timedelta(days=7),
+                                allData,
+                            )
+                        ),
+                    )
+                )
+            )
+            / len(
+                list(
+                    map(
+                        lambda x: x["energy"],
+                        list(
+                            filter(
+                                lambda x: x["date"]
+                                > datetime.datetime.now().date()
+                                - datetime.timedelta(days=7),
+                                allData,
+                            )
+                        ),
+                    )
+                )
+            ),
+            "weeklyAvgAc": sum(
+                list(
+                    map(
+                        lambda x: x["ac"],
+                        list(
+                            filter(
+                                lambda x: x["date"]
+                                > datetime.datetime.now().date()
+                                - datetime.timedelta(days=7),
+                                allData,
+                            )
+                        ),
+                    )
+                )
+            )
+            / len(
+                list(
+                    map(
+                        lambda x: x["ac"],
+                        list(
+                            filter(
+                                lambda x: x["date"]
+                                > datetime.datetime.now().date()
+                                - datetime.timedelta(days=7),
+                                allData,
+                            )
+                        ),
+                    )
+                )
+            ),
+            "weeklyAvgGas": sum(
+                list(
+                    map(
+                        lambda x: x["ac"],
+                        list(
+                            filter(
+                                lambda x: x["date"]
+                                > datetime.datetime.now().date()
+                                - datetime.timedelta(days=7),
+                                allData,
+                            )
+                        ),
+                    )
+                )
+            )
+            / len(
+                list(
+                    map(
+                        lambda x: x["ac"],
+                        list(
+                            filter(
+                                lambda x: x["date"]
+                                > datetime.datetime.now().date()
+                                - datetime.timedelta(days=7),
+                                allData,
+                            )
+                        ),
+                    )
+                )
+            ),
+            "monthlyTotalEnergy": sum(
+                list(
+                    map(
+                        lambda x: x["energy"],
+                        filter(
+                            lambda x: x["date"].month
+                            == datetime.datetime.now().date().month
+                            and x["date"].year == datetime.datetime.now().date().year,
+                            allData,
+                        ),
+                    )
+                )
+            ),
+            "monthlyTotalAc": sum(
+                list(
+                    map(
+                        lambda x: x["ac"],
+                        filter(
+                            lambda x: x["date"].month
+                            == datetime.datetime.now().date().month
+                            and x["date"].year == datetime.datetime.now().date().year,
+                            allData,
+                        ),
+                    )
+                )
+            ),
+            "monthlyTotalGas": sum(
+                list(
+                    map(
+                        lambda x: x["gas"],
+                        filter(
+                            lambda x: x["date"].month
+                            == datetime.datetime.now().date().month
+                            and x["date"].year == datetime.datetime.now().date().year,
+                            allData,
+                        ),
+                    )
+                )
+            ),
+        }
         return render(
-            request, "dashboard.html", context={"message": "Success"}, status=201
+            request,
+            "dashboard.html",
+            context={"message": "Success", "matrix": matrix},
+            status=201,
         )
 
 
