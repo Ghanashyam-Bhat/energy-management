@@ -137,12 +137,12 @@
         <div class="profile-info">
             <div class="editable" id="name">
                 <span class="label">Name:</span>
-                <span class="value">John Doe</span>
+                <span class="value">{{ username }}</span>
                 <span class="edit-icon" onclick="editField('name')">&#9998;</span>
             </div>
             <div class="editable" id="email">
                 <span class="label">Email:</span>
-                <span class="value">johndoe@example.com</span>
+                <span class="value">{{ email }}</span>
             </div>
         </div>
     </div>
@@ -159,16 +159,18 @@
     <table>
         <tr>
             <th>Date</th>
-            <th>Energy</th>
-            <th>AC</th>
-            <th>Gas</th>
+            <th>Energy (W)</th>
+            <th>AC (W)</th>
+            <th>Gas (kg)</th>
         </tr>
+        {% for i in history %}
         <tr>
-            <td>2023-11-05</td>
-            <td>100 kWh</td>
-            <td>On</td>
-            <td>Off</td>
+            <td>{{ i.date }}</td>
+            <td>{{ i.energy }}</td>
+            <td>{{ i.ac }}</td>
+            <td>{{ i.gas }}</td>
         </tr>
+        {% endfor %}
         <!-- Add more rows as needed -->
     </table>
 
@@ -183,23 +185,84 @@
             document.getElementById('cancel-button').style.display = 'inline-block';
         }
 
+        function getCookie(name) {
+            const value = `; ${document.cookie}`;
+            const parts = value.split(`; ${name}=`);
+            if (parts.length === 2) return parts.pop().split(';').shift();
+        }
+
         function saveField() {
             Object.keys(editableFields).forEach(fieldId => {
                 const newValue = document.getElementById(fieldId).querySelector('.value').textContent;
-                // Send a POST request to your server here to update the profile data with the newValue
+                var formData = new FormData();
+                    formData.append('user_name', newValue);
+                    formData.append('type', 'user_name')
+
+                    // Make a POST request with the FormData
+                    const csrfToken = getCookie('csrftoken');
+                    fetch('/energy/profile/', {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'X-CSRFToken': csrfToken, // Include the CSRF token in the headers
+                    },
+                    })
+                    .then(response => {
+                        if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                        }
+                        return response.text();
+                    })
+                    .then(data => {
+                        console.log('Response data:', data);
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                    });
                 console.log(`Updating ${fieldId} to: ${newValue}`);
             });
+            resetEditing();
+        }
 
+        function handlePpChange(){
             // For the profile picture, you can handle the file upload here
             const fileInput = document.getElementById('profile-picture-input');
             if (fileInput.files.length > 0) {
                 const newProfilePicture = fileInput.files[0];
                 // Send a POST request to your server to update the profile picture
+                var formData = new FormData();
+                formData.append('profile_pic', newProfilePicture);
+                formData.append('type', 'profile_pic')
+
+                console.log(formData)
+
+                // Make a POST request with the FormData
+                const csrfToken = getCookie('csrftoken');
+                fetch('/energy/profile/', {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-CSRFToken': csrfToken, // Include the CSRF token in the headers
+                },
+                })
+                .then(response => {
+                    if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                    }
+                    return response.text();
+                })
+                .then(data => {
+                    console.log('Response data:', data);
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
                 console.log('Updating profile picture:', newProfilePicture.name);
             }
-
-            resetEditing();
         }
+
+        const fileInput = document.getElementById('profile-picture-input');
+        fileInput.addEventListener('change', handlePpChange);
 
         function cancelEdit() {
             Object.keys(editableFields).forEach(fieldId => {
