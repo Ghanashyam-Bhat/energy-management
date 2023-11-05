@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #333;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .profile-container {
+            text-align: center;
+            background-color: #444;
+            border-radius: 10px;
+            padding: 20px;
+        }
+
+        .profile-picture {
+            border-radius: 50%;
+            width: 150px;
+            height: 150px;
+            overflow: hidden;
+            margin: 0 auto;
+            background-color: #555;
+        }
+
+        .profile-picture img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .profile-info {
+            margin: 20px 0;
+        }
+
+        .editable {
+            display: flex;
+            align-items: center;
+            margin: 10px;
+        }
+
+        .label {
+            width: 100px;
+            color: #999;
+        }
+
+        .edit-icon {
+            cursor: pointer;
+            margin-left: 10px;
+            color: #999;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .actions {
+            margin-top: 20px;
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: #007BFF;
+            border: none;
+            border-radius: 5px;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            margin: 5px;
+            transition: background-color 0.3s;
+        }
+
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        table {
+            width: 80%;
+            border-collapse: collapse;
+            background-color: #444;
+            color: white;
+        }
+
+        th, td {
+            border: 1px solid #555;
+            padding: 10px;
+            text-align: center;
+        }
+
+        th {
+            background-color: #007BFF;
+        }
+
+        button.get-copy-button {
+            padding: 10px 20px;
+            background-color: #007BFF;
+            border: none;
+            border-radius: 5px;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            margin: 5px;
+            transition: background-color 0.3s;
+        }
+
+        button.get-copy-button:hover {
+            background-color: #0056b3;
+        }
+
+        .left-end-button-container {
+            text-align: left;
+            margin: 20px;
+        }
+
+        .left-end-button {
+            margin: 0;
+        }
+    </style>
+
+    
+</head>
+<body>
+    <div class="profile-container">
+        <div class="profile-picture" id="profile-picture">
+            <img src="https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885_1280.jpg" alt="Profile Picture">
+            <input type="file" id="profile-picture-input" accept="image/*" style="display: none;">
+        </div>
+        <label for="profile-picture-input" class="edit-icon" class="profile-edit">&#9998;</label>
+        <div class="profile-info">
+            <div class="editable" id="name">
+                <span class="label">Name:</span>
+                <span class="value">John Doe</span>
+                <span class="edit-icon" onclick="editField('name')">&#9998;</span>
+            </div>
+            <div class="editable" id="email">
+                <span class="label">Email:</span>
+                <span class="value">johndoe@example.com</span>
+            </div>
+        </div>
+    </div>
+    <div class="actions">
+        <button id="save-button" class="hidden" onclick="saveField()">Save</button>
+        <button id="cancel-button" class="hidden" onclick="cancelEdit()">Cancel</button>
+    </div>
+
+    <div class="left-end-button-container">
+        <button class="get-copy-button" onclick="getCopy()">Get a Copy</button>
+    </div>
+
+    <!-- Table section -->
+    <table>
+        <tr>
+            <th>Date</th>
+            <th>Energy</th>
+            <th>AC</th>
+            <th>Gas</th>
+        </tr>
+        <tr>
+            <td>2023-11-05</td>
+            <td>100 kWh</td>
+            <td>On</td>
+            <td>Off</td>
+        </tr>
+        <!-- Add more rows as needed -->
+    </table>
+
+    <script>
+        let editableFields = {};
+
+        function editField(fieldId) {
+            editableFields[fieldId] = document.getElementById(fieldId).querySelector('.value').textContent;
+            document.getElementById(fieldId).querySelector('.value').contentEditable = true;
+            document.getElementById(fieldId).querySelector('.edit-icon').style.display = 'none';
+            document.getElementById('save-button').style.display = 'inline-block';
+            document.getElementById('cancel-button').style.display = 'inline-block';
+        }
+
+        function saveField() {
+            Object.keys(editableFields).forEach(fieldId => {
+                const newValue = document.getElementById(fieldId).querySelector('.value').textContent;
+                // Send a POST request to your server here to update the profile data with the newValue
+                console.log(`Updating ${fieldId} to: ${newValue}`);
+            });
+
+            // For the profile picture, you can handle the file upload here
+            const fileInput = document.getElementById('profile-picture-input');
+            if (fileInput.files.length > 0) {
+                const newProfilePicture = fileInput.files[0];
+                // Send a POST request to your server to update the profile picture
+                console.log('Updating profile picture:', newProfilePicture.name);
+            }
+
+            resetEditing();
+        }
+
+        function cancelEdit() {
+            Object.keys(editableFields).forEach(fieldId => {
+                document.getElementById(fieldId).querySelector('.value').textContent = editableFields[fieldId];
+            });
+
+            resetEditing();
+        }
+
+        function resetEditing() {
+            Object.keys(editableFields).forEach(fieldId => {
+                document.getElementById(fieldId).querySelector('.value').contentEditable = false;
+                document.getElementById(fieldId).querySelector('.edit-icon').style.display = 'inline-block';
+            });
+
+            document.getElementById('save-button').style.display = 'none';
+            document.getElementById('cancel-button').style.display = 'none';
+
+            editableFields = {};
+        }
+
+        function getCopy() {
+            // Send a POST request to /energy/offile/
+            // You can use the fetch API or any other method to make the POST request here
+            console.log('Sending POST request to /energy/offile/');
+        }
+    </script>
+</body>
+</html>
