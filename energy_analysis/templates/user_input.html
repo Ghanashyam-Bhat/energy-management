@@ -55,7 +55,7 @@
 <body>
   <div class="form-container">
     <form method="POST" action="/submit"> <!-- Set the appropriate action attribute for your server endpoint -->
-
+      {% csrf_token %}
       <div class="form-group">
         <label for="date">Date</label>
         <input type="date" id="date" name="date">

@@ -73,7 +73,7 @@
     <div class="button-container">
         <a href="/energy/profile/" class="button" >Profile</a>
         <a href="/energy/form/" class="button">Add New Data</a>
-        <a href="/auth/logout/" id="clear-cookies-btn" class="button">Logout</a>
+        <button style="border: #f0f0f0;" onclick="clearCookies()" id="clear-cookies-btn" class="button">Logout</button>
     </div>
     <div class="table-container">
         <div class="grid-table">
@@ -107,21 +107,14 @@
         // Function to clear all cookies
         function clearCookies() {
           var cookies = document.cookie.split(";");
-    
           for (var i = 0; i < cookies.length; i++) {
             var cookie = cookies[i];
             var eqPos = cookie.indexOf("=");
             var name = eqPos > -1 ? cookie.substr(0, eqPos) : cookie;
             document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT";
           }
-          
-          alert("All cookies have been cleared.");
+          window.location.href = '/auth/logout/'
         }
-    
-        // Add a click event listener to the button
-        document.getElementById("clear-cookies-btn").addEventListener("click", function() {
-          clearCookies();
-        });
       </script>
 </body>
 </html>

@@ -4,6 +4,9 @@ from django.contrib.auth.models import User
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required
 
+from django.contrib.sessions.models import Session
+from django.contrib.auth import get_user_model
+
 
 # Create your views here.
 @csrf_exempt
@@ -14,12 +17,12 @@ def login_api(request):
         )
     elif request.method == "POST":
         try:
-            email = request.GET["email"]
-            password = request.GET["password"]
+            email = request.POST["email"]
+            password = request.POST["password"]
             user = authenticate(request, username=email, password=password)
             if user is not None:
                 login(request, user)
-                return redirect("/energy/add/")
+                return redirect("/")
             else:
                 return render(
                     request,
@@ -40,8 +43,16 @@ def signup_api(request):
             request, "signup_page.html", context={"message": "Success"}, status=201
         )
     elif request.method == "POST":
-        email = request.GET["email"]
-        password = request.GET["password"]
+        email = request.POST["email"]
+        password = request.POST["password"]
+        cpassword = request.POST["cpassword"]
+        if password != cpassword:
+            return render(
+                request,
+                "signup_page.html",
+                context={"message": "Password mismatch"},
+                status=401,
+            )
         user = User.objects.filter(username=email).first()
         if user:
             return render(
@@ -53,6 +64,7 @@ def signup_api(request):
         try:
             # Create a new user
             user = User.objects.create_user(username=email, password=password)
+            login(request, user)
             return redirect("/auth/add_ac/")
         except Exception as e:
             return render(
@@ -83,4 +95,4 @@ def get_ac(request):
                 break
         ac_data = list(map(int, ac_data))
         print(ac_data)
-        return redirect("energy/dashboard/")
+        return redirect("/")

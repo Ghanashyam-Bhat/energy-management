@@ -74,6 +74,7 @@
     <div class="container">
         <h1 style="text-align: center;">Energy details</h1>
         <form action="/auth/add_ac/" id="ac-form" method="POST">
+            {% csrf_token %}
             <div class="input-container">
                 <div class="input-group">
                     <label class="label" for="acWatts1">AC 1</label>

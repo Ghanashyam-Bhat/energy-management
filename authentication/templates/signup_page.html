@@ -95,6 +95,7 @@
     <div class="background">
         <div class="container">
             <form action="/auth/signup/" method="POST" class="form-class">
+                {% csrf_token %}
                 <h1>SignUp</h1>
                 <div class="input-container">
                     <label for="email">Email</label>
