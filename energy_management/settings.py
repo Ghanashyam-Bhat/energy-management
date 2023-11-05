@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "django_extensions",
     # Installed Apps
     "authentication.apps.AuthenticationConfig",
     "energy_analysis.apps.EnergyAnalysisConfig",
