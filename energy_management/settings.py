@@ -29,6 +29,13 @@ SECRET_KEY = "django-insecure-$s(@2rqs%8k+y-q-w%cv2sz%d+r=edxj&x!&7g@q@0!yd29_^z
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
+# This is to configure the settnigs for serving static files
+MEDIA_URL = "/media/"
+MEDIA_ROOT = os.path.join(BASE_DIR, "")
+
+STATIC_URL = "/static/"
+STATIC_ROOT = os.path.join(BASE_DIR, "static")
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 ALLOWED_HOSTS = ["energy-management.vercel.app"]
 
