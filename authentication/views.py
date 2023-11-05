@@ -3,9 +3,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required
-
-from django.contrib.sessions.models import Session
-from django.contrib.auth import get_user_model
+from .models import airConditioner, consumer
 
 
 # Create your views here.
@@ -64,6 +62,8 @@ def signup_api(request):
         try:
             # Create a new user
             user = User.objects.create_user(username=email, password=password)
+            new = consumer(id=email)
+            new.save()
             login(request, user)
             return redirect("/auth/add_ac/")
         except Exception as e:
@@ -89,10 +89,13 @@ def get_ac(request):
         while True:
             count += 1
             try:
-                ac = request.GET[f"acWatts{count}"]
+                ac = request.POST[f"acWatts{count}"]
                 ac_data.append(ac)
             except:
                 break
         ac_data = list(map(int, ac_data))
-        print(ac_data)
+        for i in ac_data:
+            user = consumer.objects.get(id=request.user)
+            new = airConditioner(user=user, watts=i)
+            new.save()
         return redirect("/")

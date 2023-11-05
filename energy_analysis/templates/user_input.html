@@ -54,7 +54,7 @@
 </head>
 <body>
   <div class="form-container">
-    <form method="POST" action="/submit"> <!-- Set the appropriate action attribute for your server endpoint -->
+    <form method="POST" action="/energy/form/"> <!-- Set the appropriate action attribute for your server endpoint -->
       {% csrf_token %}
       <div class="form-group">
         <label for="date">Date</label>
@@ -65,12 +65,12 @@
         <label for="energy">Energy Units spent</label>
         <input type="text" id="energy" name="energy">
       </div>
-
-      <div class="form-group">
-        <label for="ac">AC Used (in Hours)</label>
-        <input type="text" id="ac" name="ac">
-      </div>
-
+      {% for i in ac_list %}
+        <div class="form-group">
+          <label for="{{ i }}">{{ i }} (in Hours)</label>
+          <input type="text" id="{{ i }}" name="{{ i }}">
+        </div>
+      {% endfor %}
       <div class="form-group">
         <label for="gas">Gas (Weight spent in Kg)</label>
         <input type="text" id="gas" name="gas">
