@@ -28,9 +28,9 @@ def dashboard(request):
                 "dailyAvgEnergy": sum(list(map(lambda x: x["energy"], allData)))
                 / len(list(map(lambda x: x["energy"], allData))),
                 "dailyAvgAc": sum(list(map(lambda x: x["ac"], allData)))
-                / len(list(map(lambda x: x["energy"], allData))),
+                / len(list(map(lambda x: x["ac"], allData))),
                 "dailyAvgGas": sum(list(map(lambda x: x["gas"], allData)))
-                / len(list(map(lambda x: x["energy"], allData))),
+                / len(list(map(lambda x: x["gas"], allData))),
                 "weeklyAvgEnergy": sum(
                     list(
                         map(
@@ -94,7 +94,7 @@ def dashboard(request):
                 "weeklyAvgGas": sum(
                     list(
                         map(
-                            lambda x: x["ac"],
+                            lambda x: x["gas"],
                             list(
                                 filter(
                                     lambda x: x["date"]
@@ -109,7 +109,7 @@ def dashboard(request):
                 / len(
                     list(
                         map(
-                            lambda x: x["ac"],
+                            lambda x: x["gas"],
                             list(
                                 filter(
                                     lambda x: x["date"]
